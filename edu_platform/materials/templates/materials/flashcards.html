@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Flashcards for "{{ material.title }}"</h2>
+
+{% if flashcards %}
+  <ul>
+    {% for card in flashcards %}
+      <li>
+        <strong>Q:</strong> {{ card.question }}<br>
+        <strong>A:</strong> {{ card.answer }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No flashcards available.</p>
+{% endif %}
+
+<a href="{% url 'materials_list' %}">← Back to Materials</a>
+{% endblock %}
