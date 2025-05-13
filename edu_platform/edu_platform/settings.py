@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'core',
     'materials',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000"
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'

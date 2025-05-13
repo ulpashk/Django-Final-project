@@ -32,3 +32,9 @@ class Flashcard(models.Model):
     extracted_text = models.ForeignKey(ExtractedText, on_delete=models.CASCADE, related_name="flashcards")
     question = models.TextField()
     answer = models.TextField()
+
+
+class Summary(models.Model):
+    extracted_text = models.ForeignKey(ExtractedText, on_delete=models.CASCADE, related_name="summarized")
+    summarized_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

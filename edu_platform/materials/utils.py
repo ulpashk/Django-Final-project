@@ -1,6 +1,14 @@
 from PyPDF2 import PdfReader
 import spacy
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import simpleSplit
+import io
+from reportlab.pdfgen import canvas
 
+
+from transformers import pipeline
+
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
 #works fine
 def extract_text_from_pdf(pdf_path):
@@ -70,6 +78,29 @@ def generate_flashcards(text):
     return flashcards
 
 
+def summarize_text(text, max_length=150, min_length=300):
+    summary = summarizer(text, max_length=max_length, min_length=min_length, do_sample=False)
+    return summary[0]['summary_text']
+
+
+
+def generate_pdf(summary):
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    
+    width, height = letter
+    text_object = p.beginText(40, height - 50)  # Starting position
+    text_object.setFont("Helvetica", 12)
+
+    wrapped_lines = simpleSplit(summary.summarized_text, "Helvetica", 12, width - 80)
+    for line in wrapped_lines:
+        text_object.textLine(line)
+
+    p.drawText(text_object)
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+    return buffer
 
 
 ##uses openai not free

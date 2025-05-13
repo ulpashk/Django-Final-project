@@ -1,6 +1,6 @@
 from celery import shared_task
 from .models import Material, ExtractedText, Flashcard
-from .utils import generate_flashcards, extract_text_from_pdf
+from .utils import generate_flashcards, extract_text_from_pdf, summarize_text
 
 
 @shared_task
@@ -29,6 +29,17 @@ def generate_tests_from_pdf(material_id):
 
     except Material.DoesNotExist:
         pass
+
+
+@shared_task
+def summarize_text_task(extracted_text_id):
+    extracted = ExtractedText.objects.get(id=extracted_text_id)
+    summarized = summarize_text(extracted.text)
+    Summary.objects.create(
+        extracted_text=extracted,
+        summarized_text=summarized
+    )
+    return summarized
 
 
 ##with openai not free one 
