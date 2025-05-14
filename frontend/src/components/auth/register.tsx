@@ -3,19 +3,80 @@ import { useTranslation } from 'react-i18next';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const RegistrationForm: React.FC = () => {
   const { t } = useTranslation();
 
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [newsletter, setNewsletter] = useState(false);
   const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   console.log({ email, password, newsletter, ageConfirmed, termsAccepted });
+  // };
+
+  async function registerUser(data: {
+    email: string;
+    name: string;
+    password: string;
+  }) {
+    const response = await fetch('http://127.0.0.1:8000/api/auth/register/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Registration failed');
+    }
+
+    return response.json();
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({ email, password, newsletter, ageConfirmed, termsAccepted });
+
+    // Enforce required checks before submitting
+    if (!ageConfirmed) {
+      alert('You must confirm you are over the required age.');
+      return;
+    }
+
+    if (!termsAccepted) {
+      alert('You must accept the terms and privacy policy.');
+      return;
+    }
+
+    // Optional: Newsletter is optional, so no check needed
+    // Now submit only the required fields to backend
+    try {
+      const result = await registerUser({
+        email,
+        name,
+        password,
+      });
+
+      console.log('User registered:', result);
+      alert('User registered! Please, Log in');
+      navigate('/login');
+      // Optionally redirect or show success message
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Registration error:', error.message);
+        alert(error.message);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
   };
 
   const handleGoogleSignUp = () => {
@@ -55,6 +116,23 @@ const RegistrationForm: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('loginEmailPlaceholder') || ''}
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 mb-1"
+                htmlFor="regName"
+              >
+                {t('loginNameLabel')}
+              </label>
+              <input
+                type="text"
+                id="regName"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={t('loginNamePlaceholder') || ''}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
               />
             </div>

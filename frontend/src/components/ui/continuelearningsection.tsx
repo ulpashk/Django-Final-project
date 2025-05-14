@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Пример данных для списка тестов
 const tests = [
@@ -62,7 +63,8 @@ export function ContinueLearningSection() {
       {/* Список тестов */}
       <div className="space-y-4">
         {tests.map((test) => (
-          <div
+          <Link
+            to={`/app/tests/${test.id}`}
             key={test.id}
             className="border border-gray-200 rounded-md p-4 flex justify-between items-center hover:bg-gray-50 transition-colors cursor-pointer"
           >
@@ -139,7 +141,7 @@ export function ContinueLearningSection() {
                 ></div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

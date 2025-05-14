@@ -1,171 +1,19 @@
 import React from 'react';
-
-const libraryItems = [
-  {
-    id: 1,
-    type: 'test',
-    name: 'Akzhol',
-    mastery: null,
-    questions: null,
-    created: '27.04.25 22:42',
-    progress: 40,
-  },
-  {
-    id: 2,
-    type: 'test',
-    name: 'Week 1',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:00',
-    progress: 40,
-  },
-  {
-    id: 3,
-    type: 'test',
-    name: 'Week 10',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:09',
-    progress: 40,
-  },
-  {
-    id: 4,
-    type: 'test',
-    name: 'Week 11',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:10',
-    progress: 40,
-  },
-  {
-    id: 5,
-    type: 'test',
-    name: 'Week 12',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:12',
-    progress: 40,
-  },
-  {
-    id: 6,
-    type: 'test',
-    name: 'Week 13',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:13',
-    progress: 40,
-  },
-  {
-    id: 7,
-    type: 'test',
-    name: 'Week 14',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:41',
-    progress: 40,
-  },
-  {
-    id: 8,
-    type: 'test',
-    name: 'Week 2',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:02',
-    progress: 40,
-  },
-  {
-    id: 9,
-    type: 'test',
-    name: 'Week 3',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:15',
-    progress: 40,
-  },
-  {
-    id: 10,
-    type: 'test',
-    name: 'Week 4',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:23',
-    progress: 40,
-  },
-  {
-    id: 11,
-    type: 'test',
-    name: 'Week 5',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:30',
-    progress: 40,
-  },
-  {
-    id: 12,
-    type: 'test',
-    name: 'Week 6',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:36',
-    progress: 40,
-  },
-  {
-    id: 13,
-    type: 'test',
-    name: 'Week 7',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:04',
-    progress: 40,
-  },
-  {
-    id: 14,
-    type: 'test',
-    name: 'Week 8',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:06',
-    progress: 40,
-  },
-  {
-    id: 15,
-    type: 'test',
-    name: 'Week 9',
-    mastery: null,
-    questions: null,
-    created: '19.04.25 14:07',
-    progress: 40,
-  },
-  {
-    id: 16,
-    type: 'test',
-    name: "Yarmuk's personal folder",
-    mastery: null,
-    questions: null,
-    created: '20.04.25 13:22',
-    progress: 40,
-  },
-  {
-    id: 17,
-    type: 'test',
-    name: 'E-Business Strategies Test',
-    mastery: null,
-    questions: 20,
-    created: '18.04.25 00:00',
-    progress: 60,
-  },
-  {
-    id: 18,
-    type: 'test',
-    name: 'Foundational Theories of Motivation',
-    mastery: null,
-    questions: 49,
-    created: '17.04.25 10:06',
-    progress: 80,
-  },
-];
+import { useQuery } from '@tanstack/react-query';
+import { fetchLibraryItems } from '../../api/library';
+import type { LibraryItem } from '../../types/library';
+import { Link } from 'react-router-dom';
 
 export function LibraryListView() {
+  const { data, isLoading, isError } = useQuery<LibraryItem[]>({
+    queryKey: ['libraryItems'],
+    queryFn: fetchLibraryItems,
+  });
+
+  if (isLoading) return <div className="p-4">Loading...</div>;
+  if (isError)
+    return <div className="p-4 text-red-500">Error loading items.</div>;
+
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -208,26 +56,13 @@ export function LibraryListView() {
           Create new
         </button>
       </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2">
-                <div className="flex items-center">
-                  Name
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="ml-1 h-4 w-4 text-gray-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
+                Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Mastery Level
@@ -244,16 +79,18 @@ export function LibraryListView() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {libraryItems.map((item) => (
+            {data?.map((item) => (
               <tr
                 key={item.id}
                 className="hover:bg-gray-50 transition-colors cursor-pointer"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
+                  <Link
+                    to={`/app/tests/${item.id}`}
+                    className="flex items-center"
+                  >
                     {item.type === 'folder' ? (
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 text-blue-500 mr-3"
                         viewBox="0 0 20 20"
                         fill="currentColor"
@@ -262,7 +99,6 @@ export function LibraryListView() {
                       </svg>
                     ) : (
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5 text-green-500 mr-3"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -272,7 +108,7 @@ export function LibraryListView() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"
                         />
                       </svg>
                     )}
@@ -287,21 +123,20 @@ export function LibraryListView() {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {item.mastery !== null ? item.mastery : '-'}
+                  {item.mastery ?? '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {item.questions !== null ? item.questions : '-'}
+                  {item.questions ?? '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {item.created}
+                  {new Date(item.created).toLocaleString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button className="text-gray-500 hover:text-gray-700">
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5"
                       viewBox="0 0 20 20"
                       fill="currentColor"

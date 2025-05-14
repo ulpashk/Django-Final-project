@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import OverviewPage from './pages/OverviewPage';
 import LibraryPage from './pages/LibraryPage';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 const App = () => {
   return (
@@ -23,7 +24,11 @@ const App = () => {
         />
         <Route
           path="/app"
-          element={<Outlet />}
+          element={
+            <ProtectedRoute>
+              <Outlet />
+            </ProtectedRoute>
+          }
         >
           <Route
             path="overview"

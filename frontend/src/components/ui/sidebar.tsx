@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
   activeItem?:
@@ -22,7 +23,15 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem }) => {
   const isLibrary = location.pathname === '/app/library';
 
   const isActive = (itemKey: string) => activeItem === itemKey;
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    // Clear auth token (adjust if using cookies or other storage)
+    localStorage.removeItem('accessToken');
+
+    // Redirect to login page
+    navigate('/login');
+  };
   return (
     <aside className="w-64 bg-white p-6 flex flex-col min-h-screen">
       <div className="flex-grow">
@@ -205,6 +214,28 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem }) => {
                 </svg>
                 {t('sidebarSettings')}
               </a>
+            </li>
+            <li>
+              <button
+                onClick={handleLogout}
+                className="flex items-center text-gray-600 hover:text-blue-600 transition duration-150 p-2 rounded-md w-full text-left"
+              >
+                <svg
+                  className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h5a2 2 0 012 2v1"
+                  />
+                </svg>
+                {t('sidebarLogout')}
+              </button>
             </li>
           </ul>
         </nav>
