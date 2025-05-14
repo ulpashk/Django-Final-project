@@ -1,0 +1,16 @@
+Django==4.2.5
+channels==4.0.0
+djangorestframework==3.14.0
+PyJWT==2.8.0
+
+djangorestframework-simplejwt>=5.3.1
+drf-yasg>=1.21.7
+django-cors-headers>=4.3.1
+
+celery>=5.3.6
+redis>=5.0.3
+
+PyPDF2>=3.0.1
+spacy>=3.7.2
+reportlab>=4.0.8
+pyotp>=2.9.0
